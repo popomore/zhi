@@ -1,0 +1,28 @@
+{
+  "name": "zhi",
+  "version": "0.1.0",
+  "description": "a key/value parser support simple template",
+  "main": "index",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha-lcov-reporter": "~0.0.1",
+    "coveralls": "~2.0.7",
+    "mocha": "~1.8.1",
+    "should": "~3.1.3",
+    "blanket": "~1.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/popomore/zhi.git"
+  },
+  "author": "popomore <sakura9515@gmail.com>",
+  "license": "MIT",
+  "config": {
+    "blanket": {
+      "pattern": "//^((?!(node_modules|test)).)*$/"
+    }
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -t 200000 --reporter spec"
+  }
+}
