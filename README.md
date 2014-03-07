@@ -75,6 +75,10 @@ return
 
 ## HISTORY
 
+### 0.2.1
+
+improve code
+
 ### 0.2.0
 
 add mixin option
