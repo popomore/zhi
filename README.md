@@ -44,6 +44,45 @@ zhi(obj, {
 });
 ```
 
+You can use extra data with `mixin` option
+
+```
+var options = {
+  mixin: {
+    'x': '1',
+    'y': '2',
+    'z': '3'
+  }
+};
+zhi({
+  a: '{{b}}/{{c}}',
+  b: '{{x}}{{y}}{{z}}',
+  c: '{{d}}',
+  d: 'abc'
+}, options);
+```
+
+return
+
+```
+{
+  a: '123/abc',
+  b: '123',
+  c: 'abc',
+  d: 'abc'
+}
+```
+
+## HISTORY
+
+### 0.2.0
+
+add mixin option
+
+### 0.1.0
+
+first version
+
 ## LISENCE
 
 MIT

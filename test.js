@@ -84,4 +84,38 @@ describe('Zhi', function() {
       d: 'abc'
     });
   });
+
+  it('use mixin data', function() {
+    zhi({
+      a: '{{b}}/{{c}}',
+      b: '{{x}}{{y}}{{z}}',
+      c: '{{d}}',
+      d: 'abc'
+    }, {
+      mixin: {
+        'x': '1',
+        'y': '2',
+        'z': '3'
+      }
+    }).should.eql({
+      a: '123/abc',
+      b: '123',
+      c: 'abc',
+      d: 'abc'
+    });
+  });
+
+  it('mixin data has lower priority', function() {
+    zhi({
+      a: '{{b}}',
+      b: '1'
+    }, {
+      mixin: {
+        b: '2'
+      }
+    }).should.eql({
+      a: '1',
+      b: '1'
+    });
+  });
 });

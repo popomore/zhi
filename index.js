@@ -1,18 +1,23 @@
 module.exports = zhi;
 
-function zhi (obj, options) {
-  if (!isObject(obj)) return null;
+function zhi (src, options) {
+  if (!isObject(src)) return null;
 
   options || (options = {});
   if (typeof options.tagStart !== 'string') options.tagStart = '{{';
   if (typeof options.tagEnd !== 'string') options.tagEnd = '}}';
-  var reg = [
+  options.mixin || (options.mixin = {});
+
+  var reg = options.reg = [
     options.tagStart.replace(/([\$\/\+\!\*])/g, '\\$1'),
     '\\s*([\\w.-]+)\\s*',
     options.tagEnd
   ].join('');
 
-  return run(parse(obj, reg), reg);
+  src = parse(src, reg);
+  options.mixin = parseMixin(options.mixin);
+
+  return run(src, options);
 }
 
 function parse (obj, reg) {
@@ -37,12 +42,25 @@ function parse (obj, reg) {
   return parsed;
 }
 
-function run (obj, reg) {
-  var result = {}, re = new RegExp(reg, 'g');
+function parseMixin(mixin) {
+  var result = {};
+  Object.keys(mixin).forEach(function(key) {
+    result[key] = {value: mixin[key]};
+  });
+  return result;
+}
 
-  for (var i in obj) {
-    next(obj[i]);
-    result[i] = obj[i].value;
+function run (src, options) {
+  var result = {}, re = new RegExp(options.reg, 'g');
+
+  var data = options.mixin;
+  for (var j in src) {
+    data[j] = src[j];
+  }
+
+  for (var i in src) {
+    next(src[i]);
+    result[i] = src[i].value;
   }
 
   return result;
@@ -53,22 +71,20 @@ function run (obj, reg) {
 
     a._running = true;
     a.deps.forEach(function(item) {
-      if (!obj[item].value) next(obj[item]);
+      if (!src[item].value) next(src[item]);
     });
 
-    a.value = template(a, obj);
+    a.value = template(a);
     delete a._running;
   }
 
-  function template(self, obj) {
+  function template(self) {
     var tpl = self.template;
     return tpl.replace(re, function(all, match) {
-      return obj[match] ? obj[match].value : all;
+      return data[match] ? data[match].value : all;
     });
   }
 }
-
-
 
 function isObject(obj) {
   return Object.prototype.toString.call(obj) === '[object Object]';
