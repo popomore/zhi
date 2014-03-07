@@ -1,4 +1,4 @@
-require('should');
+var should = require('should');
 var zhi = require('./');
 
 describe('Zhi', function() {
@@ -117,5 +117,9 @@ describe('Zhi', function() {
       a: '1',
       b: '1'
     });
+  });
+
+  it('should be object', function() {
+    should(zhi('')).be.exactly(null);
   });
 });

@@ -26,13 +26,11 @@ function parse (obj, reg) {
     var i, r = new RegExp(reg, 'g');
     var value = obj[key];
     var o = {
-      args: [],
       deps: [],
       template: value
     };
     
     while(i = r.exec(value)) {
-      o.args.push(i[1]);
       if (obj[i[1]]) {
         o.deps.push(i[1]);
       }
@@ -71,7 +69,7 @@ function run (src, options) {
 
     a._running = true;
     a.deps.forEach(function(item) {
-      if (!src[item].value) next(src[item]);
+      next(src[item]);
     });
 
     a.value = template(a);
