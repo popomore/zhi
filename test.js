@@ -67,4 +67,21 @@ describe('Zhi', function() {
       d: 'abc'
     });
   });
+
+  it('more tag test', function() {
+    zhi({
+      a: '$b/${c}d',
+      b: '123',
+      c: '-${d }-',
+      d: 'abc'
+    }, {
+      tagStart: '${?',
+      tagEnd: '}?'
+    }).should.eql({
+      a: '123/-abc-d',
+      b: '123',
+      c: '-abc-',
+      d: 'abc'
+    });
+  });
 });
