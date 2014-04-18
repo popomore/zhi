@@ -1,11 +1,11 @@
 module.exports = zhi;
 
 function zhi (src, options) {
-  if (!isObject(src)) return null;
+  if (!isObject(src)) {return null;}
 
   options || (options = {});
-  if (typeof options.tagStart !== 'string') options.tagStart = '{{';
-  if (typeof options.tagEnd !== 'string') options.tagEnd = '}}';
+  if (typeof options.tagStart !== 'string') {options.tagStart = '{{';}
+  if (typeof options.tagEnd !== 'string') {options.tagEnd = '}}';}
   options.mixin || (options.mixin = {});
 
   var reg = options.reg = [
@@ -64,8 +64,8 @@ function run (src, options) {
   return result;
 
   function next(a) {
-    if (a.value) return;
-    if (a._running) throw new Error('Recursive dependency');
+    if (a.value) {return;}
+    if (a._running) {throw new Error('Recursive dependency');}
 
     a._running = true;
     a.deps.forEach(function(item) {
@@ -78,9 +78,10 @@ function run (src, options) {
 
   function template(self) {
     var tpl = self.template;
-    return tpl.replace(re, function(all, match) {
-      return data[match] ? data[match].value : all;
-    });
+    return typeof tpl !== 'string' ? tpl :
+      tpl.replace(re, function(all, match) {
+        return data[match] ? data[match].value : all;
+      });
   }
 }
 

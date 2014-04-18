@@ -122,4 +122,14 @@ describe('Zhi', function() {
   it('should be object', function() {
     should(zhi('')).be.exactly(null);
   });
+
+  it('should be type otherwise string', function() {
+    zhi({
+      a: true,
+      b: {}
+    }).should.eql({
+      a: true,
+      b: {}
+    });
+  });
 });

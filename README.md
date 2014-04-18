@@ -79,6 +79,10 @@ return
 
 ## HISTORY
 
+### 0.2.2
+
+support other type except for string
+
 ### 0.2.1
 
 improve code
