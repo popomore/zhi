@@ -3,7 +3,7 @@
 a key/value parser support simple template
 
 [![Build Status](https://travis-ci.org/popomore/zhi.png?branch=master)](https://travis-ci.org/popomore/zhi)
-[![Coverage Status](https://coveralls.io/repos/popomore/zhi/badge.png?branch=master)](https://coveralls.io/r/popomore/zhi?branch=master) 
+[![Coverage Status](https://coveralls.io/repos/popomore/zhi/badge.png?branch=master)](https://coveralls.io/r/popomore/zhi?branch=master)
 
 
 ---
@@ -78,6 +78,16 @@ return
 ```
 
 ## HISTORY
+
+### 0.3.0
+
+ignore self reference, and will not be parsed, example below
+
+```
+{
+  a: '{{a}}'
+}
+```
 
 ### 0.2.2
 

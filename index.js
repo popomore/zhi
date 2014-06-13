@@ -15,7 +15,6 @@ function zhi (src, options) {
   ].join('');
 
   src = parse(src, reg);
-  options.mixin = parseMixin(options.mixin);
 
   return run(src, options);
 }
@@ -26,10 +25,11 @@ function parse (obj, reg) {
     var i, r = new RegExp(reg, 'g');
     var value = obj[key];
     var o = {
+      name: key,
       deps: [],
       template: value
     };
-    
+
     while(i = r.exec(value)) {
       if (obj[i[1]]) {
         o.deps.push(i[1]);
@@ -40,18 +40,11 @@ function parse (obj, reg) {
   return parsed;
 }
 
-function parseMixin(mixin) {
-  var result = {};
-  Object.keys(mixin).forEach(function(key) {
-    result[key] = {value: mixin[key]};
-  });
-  return result;
-}
-
 function run (src, options) {
   var result = {}, re = new RegExp(options.reg, 'g');
 
-  var data = options.mixin;
+  var mixin = options.mixin;
+  var data = {};
   for (var j in src) {
     data[j] = src[j];
   }
@@ -69,6 +62,8 @@ function run (src, options) {
 
     a._running = true;
     a.deps.forEach(function(item) {
+      // ignore self reference
+      if (a.name === item) return;
       next(src[item]);
     });
 
@@ -80,7 +75,13 @@ function run (src, options) {
     var tpl = self.template;
     return typeof tpl !== 'string' ? tpl :
       tpl.replace(re, function(all, match) {
-        return data[match] ? data[match].value : all;
+        if (data[match] && data[match].value) {
+          return data[match].value;
+        }
+        if (mixin[match]) {
+          return mixin[match];
+        }
+        return all;
       });
   }
 }

@@ -132,4 +132,28 @@ describe('Zhi', function() {
       b: {}
     });
   });
+
+  it('should require self', function() {
+    zhi({
+      a: '{{a}}',
+      b: '{{a}}'
+    }).should.eql({
+      a: '{{a}}',
+      b: '{{a}}'
+    });
+  });
+
+  it('should require self when mixin', function() {
+    zhi({
+      a: '{{a}}',
+      b: '{{a}}'
+    }, {
+      mixin: {
+        a: 1
+      }
+    }).should.eql({
+      a: 1,
+      b: 1
+    });
+  });
 });
