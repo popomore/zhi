@@ -1,6 +1,6 @@
 {
   "name": "zhi",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "a key/value parser support simple template",
   "main": "index",
   "devDependencies": {
