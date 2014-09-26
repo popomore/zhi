@@ -3,9 +3,6 @@
   "version": "0.3.0",
   "description": "a key/value parser support simple template",
   "main": "index",
-  "dependencies": {
-    "should": "~4.0.4"
-  },
   "devDependencies": {
     "coveralls": "~2.8.0",
     "istanbul": "~0.2.6",

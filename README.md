@@ -79,6 +79,10 @@ return
 
 ## HISTORY
 
+### 0.3.1
+
+delete should in dependencies
+
 ### 0.3.0
 
 ignore self reference, and will not be parsed, example below
