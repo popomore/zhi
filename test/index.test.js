@@ -1,159 +1,162 @@
-var should = require('should');
-var zhi = require('./');
+'use strict';
+
+const assert = require('assert');
+const zhi = require('..');
 
 describe('Zhi', function() {
   it('Normal use', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '{{b}}/{{c}}',
       b: '123',
       c: '{{d}}',
-      d: 'abc'
-    }).should.eql({
+      d: 'abc',
+    }), {
       a: '123/abc',
       b: '123',
       c: 'abc',
-      d: 'abc'
+      d: 'abc',
     });
   });
 
   it('with space', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '{{ b}}/{{c }}',
       b: '123',
       c: '{{  d  }}',
-      d: 'abc'
-    }).should.eql({
+      d: 'abc',
+    }), {
       a: '123/abc',
       b: '123',
       c: 'abc',
-      d: 'abc'
+      d: 'abc',
     });
   });
 
   it('not exist', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '{{b}}/{{c}}',
-      b: '123'
-    }).should.eql({
+      b: '123',
+    }), {
       a: '123/{{c}}',
-      b: '123'
+      b: '123',
     });
   });
 
   it('Recursive dependency', function() {
-    (function(){
+    assert.throws(function() {
       zhi({
         a: '{{b}}/{{c}}',
         b: '123',
         c: '{{d}}',
-        d: '{{a}}'
+        d: '{{a}}',
       });
-    }).should.throw('Recursive dependency');
+    }, 'Recursive dependency');
   });
 
   it('specify tag', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '<%b%>/<%c%>',
       b: '123',
       c: '<%d%>',
-      d: 'abc'
+      d: 'abc',
     }, {
       tagStart: '<%',
-      tagEnd: '%>'
-    }).should.eql({
+      tagEnd: '%>',
+    }), {
       a: '123/abc',
       b: '123',
       c: 'abc',
-      d: 'abc'
+      d: 'abc',
     });
   });
 
   it('more tag test', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '$b/${c}d',
       b: '123',
       c: '-${d }-',
-      d: 'abc'
+      d: 'abc',
     }, {
       tagStart: '${?',
-      tagEnd: '}?'
-    }).should.eql({
+      tagEnd: '}?',
+    }), {
       a: '123/-abc-d',
       b: '123',
       c: '-abc-',
-      d: 'abc'
+      d: 'abc',
     });
   });
 
   it('use mixin data', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '{{b}}/{{c}}',
       b: '{{x}}{{y}}{{z}}',
       c: '{{d}}',
-      d: 'abc'
+      d: 'abc',
     }, {
       mixin: {
-        'x': '1',
-        'y': '2',
-        'z': '3'
-      }
-    }).should.eql({
+        x: '1',
+        y: '2',
+        z: '3',
+      },
+    }), {
       a: '123/abc',
       b: '123',
       c: 'abc',
-      d: 'abc'
+      d: 'abc',
     });
   });
 
   it('mixin data has lower priority', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '{{b}}',
-      b: '1'
+      b: '1',
     }, {
       mixin: {
-        b: '2'
-      }
-    }).should.eql({
+        b: '2',
+      },
+    }), {
       a: '1',
-      b: '1'
+      b: '1',
     });
   });
 
   it('should be object', function() {
-    should(zhi('')).be.exactly(null);
+    assert(zhi('') === null);
   });
 
   it('should be type otherwise string', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: true,
-      b: {}
-    }).should.eql({
+      b: {},
+    }), {
       a: true,
-      b: {}
+      b: {},
     });
   });
 
   it('should require self', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '{{a}}',
-      b: '{{a}}'
-    }).should.eql({
+      b: '{{a}}',
+    }), {
       a: '{{a}}',
-      b: '{{a}}'
+      b: '{{a}}',
     });
   });
 
   it('should require self when mixin', function() {
-    zhi({
+    assert.deepEqual(zhi({
       a: '{{a}}',
-      b: '{{a}}'
+      b: '{{a}}',
     }, {
       mixin: {
-        a: 1
-      }
-    }).should.eql({
+        a: 1,
+      },
+    }), {
       a: 1,
-      b: 1
+      b: 1,
     });
   });
+
 });
